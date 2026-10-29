@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not connected"
+        android:textSize="20sp" />
+
+    <Button android:id="@+id/btnConnect" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Connect ADB" />
+    <Button android:id="@+id/btnUp" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Up" />
+    <Button android:id="@+id/btnDown" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Down" />
+    <Button android:id="@+id/btnLeft" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Left" />
+    <Button android:id="@+id/btnRight" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Right" />
+    <Button android:id="@+id/btnSelect" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Select" />
+    <Button android:id="@+id/btnBack" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Back" />
+    <Button android:id="@+id/btnHome" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Home" />
+</LinearLayout>
