@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -24,9 +27,24 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btnConnect).setOnClickListener {
             status.text = "Connecting..."
+            val executor = Executors.newSingleThreadExecutor()
+            val future = executor.submit<Boolean> { AdbBridge.connect() }
             thread {
-                val ok = AdbBridge.connect()
-                runOnUiThread { status.text = if (ok) "Connected" else "Not connected. Is ADB debugging on?" }
+                val message = try {
+                    if (future.get(15, TimeUnit.SECONDS)) {
+                        "Connected"
+                    } else {
+                        "Failed: ${AdbBridge.lastError}"
+                    }
+                } catch (e: TimeoutException) {
+                    future.cancel(true)
+                    "Timed out after 15 seconds. Approve the ADB prompt on the TV, then press Connect again."
+                } catch (e: Exception) {
+                    "Error: ${e.javaClass.simpleName}"
+                } finally {
+                    executor.shutdownNow()
+                }
+                runOnUiThread { status.text = message }
             }
         }
 
