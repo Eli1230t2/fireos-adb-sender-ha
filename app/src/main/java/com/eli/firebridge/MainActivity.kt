@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AdbBridge.init(this)
         setContentView(R.layout.activity_main)
         val status = findViewById<TextView>(R.id.status)
 
