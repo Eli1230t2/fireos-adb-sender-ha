@@ -8,6 +8,7 @@ import java.io.File
 
 object AdbBridge {
     private const val TAG = "FireBridge"
+    private const val HOST = "10.0.0.76"
     private var dadb: Dadb? = null
     private var appContext: Context? = null
     var lastError: String = ""
@@ -33,7 +34,10 @@ object AdbBridge {
         Log.i(TAG, "connect: starting")
         return try {
             dadb?.close()
-            dadb = Dadb.create("10.0.0.76", 5555, keyPair())
+            val candidate = Dadb.create(HOST, 5555, keyPair())
+            // Dadb connects lazily, so run a real command to force the handshake.
+            candidate.shell("echo ok")
+            dadb = candidate
             Log.i(TAG, "connect: success")
             lastError = ""
             true
