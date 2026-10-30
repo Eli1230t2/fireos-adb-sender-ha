@@ -1,19 +1,39 @@
 package com.eli.firebridge
 
+import android.content.Context
 import android.util.Log
+import dadb.AdbKeyPair
 import dadb.Dadb
+import java.io.File
 
 object AdbBridge {
     private const val TAG = "FireBridge"
     private var dadb: Dadb? = null
+    private var appContext: Context? = null
     var lastError: String = ""
+
+    fun init(context: Context) {
+        appContext = context.applicationContext
+    }
+
+    // Creates the key pair once and stores it in the app's private folder,
+    // so the TV only needs to approve it once.
+    private fun keyPair(): AdbKeyPair {
+        val dir = appContext?.filesDir ?: throw IllegalStateException("AdbBridge.init() was not called")
+        val priv = File(dir, "adbkey")
+        val pub = File(dir, "adbkey.pub")
+        if (!priv.exists() || !pub.exists()) {
+            AdbKeyPair.generate(priv, pub)
+        }
+        return AdbKeyPair.read(priv, pub)
+    }
 
     @Synchronized
     fun connect(): Boolean {
         Log.i(TAG, "connect: starting")
         return try {
             dadb?.close()
-            dadb = Dadb.create("localhost", 5555)
+            dadb = Dadb.create("localhost", 5555, keyPair())
             Log.i(TAG, "connect: success")
             lastError = ""
             true
