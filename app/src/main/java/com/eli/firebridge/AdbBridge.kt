@@ -33,7 +33,7 @@ object AdbBridge {
         Log.i(TAG, "connect: starting")
         return try {
             dadb?.close()
-            dadb = Dadb.create("localhost", 5555, keyPair())
+            dadb = Dadb.create("10.0.0.76", 5555, keyPair())
             Log.i(TAG, "connect: success")
             lastError = ""
             true
